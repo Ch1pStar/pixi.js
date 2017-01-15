@@ -9,14 +9,12 @@ export default class GraphicsData
     /**
      *
      * @param {number} lineWidth - the width of the line to draw
-     * @param {number} lineColor - the color of the line to draw
-     * @param {number} lineAlpha - the alpha of the line to draw
-     * @param {number} fillColor - the color of the fill
-     * @param {number} fillAlpha - the alpha of the fill
+     * @param {Brush} strokeStyle the brush used for drawing the border of the shape
+     * @param {Brush} fillStyle the brush used for filling the shape
      * @param {boolean} fill - whether or not the shape is filled with a colour
      * @param {PIXI.Circle|PIXI.Rectangle|PIXI.Ellipse|PIXI.Polygon} shape - The shape object to draw.
      */
-    constructor(lineWidth, lineColor, lineAlpha, fillColor, fillAlpha, fill, shape)
+    constructor(lineWidth, strokeStyle, fillStyle, fill, shape)
     {
         /**
          * @member {number} the width of the line to draw
@@ -24,34 +22,14 @@ export default class GraphicsData
         this.lineWidth = lineWidth;
 
         /**
-         * @member {number} the color of the line to draw
+         * @member {Brush} the style of the line to draw
          */
-        this.lineColor = lineColor;
+        this.strokeStyle = strokeStyle;
 
         /**
-         * @member {number} the alpha of the line to draw
+         * @member {Brush} the style of the fill
          */
-        this.lineAlpha = lineAlpha;
-
-        /**
-         * @member {number} cached tint of the line to draw
-         */
-        this._lineTint = lineColor;
-
-        /**
-         * @member {number} the color of the fill
-         */
-        this.fillColor = fillColor;
-
-        /**
-         * @member {number} the alpha of the fill
-         */
-        this.fillAlpha = fillAlpha;
-
-        /**
-         * @member {number} cached tint of the fill
-         */
-        this._fillTint = fillColor;
+        this.fillStyle = fillStyle;
 
         /**
          * @member {boolean} whether or not the shape is filled with a colour
@@ -80,10 +58,8 @@ export default class GraphicsData
     {
         return new GraphicsData(
             this.lineWidth,
-            this.lineColor,
-            this.lineAlpha,
-            this.fillColor,
-            this.fillAlpha,
+            this.strokeStyle,
+            this.fillStyle,
             this.fill,
             this.shape
         );

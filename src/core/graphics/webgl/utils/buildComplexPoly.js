@@ -24,8 +24,8 @@ export default function buildComplexPoly(graphicsData, webGLData)
     const indices = webGLData.indices;
 
     webGLData.points = points;
-    webGLData.alpha = graphicsData.fillAlpha;
-    webGLData.color = hex2rgb(graphicsData.fillColor);
+    webGLData.alpha = graphicsData.fillStyle.alpha;
+    webGLData.color = hex2rgb(graphicsData.fillStyle.color);
 
     // calculate the bounds..
     let minX = Infinity;

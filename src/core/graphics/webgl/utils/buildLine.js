@@ -62,8 +62,8 @@ export default function buildLine(graphicsData, webGLData)
     const width = graphicsData.lineWidth / 2;
 
     // sort color
-    const color = hex2rgb(graphicsData.lineColor);
-    const alpha = graphicsData.lineAlpha;
+    const color = hex2rgb(graphicsData.strokeStyle.color);
+    const alpha = graphicsData.strokeStyle.alpha;
     const r = color[0] * alpha;
     const g = color[1] * alpha;
     const b = color[2] * alpha;

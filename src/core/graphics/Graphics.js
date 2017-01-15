@@ -9,6 +9,8 @@ import { SHAPES, BLEND_MODES } from '../const';
 import Bounds from '../display/Bounds';
 import bezierCurveTo from './utils/bezierCurveTo';
 import CanvasRenderer from '../renderers/canvas/CanvasRenderer';
+import SolidBrush from './brushes/SolidBrush';
+import TextureBrush from './brushes/TextureBrush';
 
 let canvasRenderer;
 const tempMatrix = new Matrix();
@@ -34,12 +36,11 @@ export default class Graphics extends Container
         super();
 
         /**
-         * The alpha value used when filling the Graphics object.
+         * The fill style of the Graphics object.
          *
-         * @member {number}
-         * @default 1
+         * @member {Brush}
          */
-        this.fillAlpha = 1;
+        this.fillStyle = new SolidBrush(0, 1);
 
         /**
          * The width (thickness) of any lines drawn.
@@ -50,12 +51,11 @@ export default class Graphics extends Container
         this.lineWidth = 0;
 
         /**
-         * The color of any lines drawn.
+         * The stroke style of the Graphics object.
          *
-         * @member {string}
-         * @default 0
+         * @member {Brush}
          */
-        this.lineColor = 0;
+        this.strokeStyle = new SolidBrush(0, 1);
 
         /**
          * Graphics data
@@ -196,9 +196,9 @@ export default class Graphics extends Container
         const clone = new Graphics();
 
         clone.renderable = this.renderable;
-        clone.fillAlpha = this.fillAlpha;
+        clone.fillStyle = this.fillStyle;
         clone.lineWidth = this.lineWidth;
-        clone.lineColor = this.lineColor;
+        clone.strokeStyle = this.strokeStyle;
         clone.tint = this.tint;
         clone.blendMode = this.blendMode;
         clone.isMask = this.isMask;
@@ -231,8 +231,7 @@ export default class Graphics extends Container
     lineStyle(lineWidth = 0, color = 0, alpha = 1)
     {
         this.lineWidth = lineWidth;
-        this.lineColor = color;
-        this.lineAlpha = alpha;
+        this.strokeStyle = new SolidBrush(color || 0, alpha);
 
         if (this.currentPath)
         {
@@ -249,8 +248,39 @@ export default class Graphics extends Container
             {
                 // otherwise its empty so lets just set the line properties
                 this.currentPath.lineWidth = this.lineWidth;
-                this.currentPath.lineColor = this.lineColor;
-                this.currentPath.lineAlpha = this.lineAlpha;
+                this.currentPath.strokeStyle = this.strokeStyle;
+            }
+        }
+
+        return this;
+    }
+
+    /**
+     * Specifies the line style used for subsequent calls to Graphics methods
+     * such as the lineTo() method or the drawCircle() method.
+     *
+     * Use lineStyle to specify stroke width
+     *
+     * @param {PIXI.Texture} bitmap the texture to fill
+     * @param {PIXI.Matrix} matrix transformation matrix
+     * @param {boolean} repeat whether the bitmap should be tiled
+     * @return {PIXI.Graphics} This Graphics object. Good for chaining method calls
+     */
+    lineBitmapStyle(bitmap, matrix, repeat)
+    {
+        this.strokeStyle = new TextureBrush(bitmap, matrix, repeat);
+
+        if (this.currentPath)
+        {
+            if (this.currentPath.shape.points.length)
+            {
+                // halfway through a line? start a new one!
+                this.drawShape(new Polygon(this.currentPath.shape.points.slice(-2)));
+            }
+            else
+            {
+                // otherwise its empty so lets just set the line properties
+                this.currentPath.strokeStyle = this.strokeStyle;
             }
         }
 
@@ -548,16 +578,39 @@ export default class Graphics extends Container
     beginFill(color = 0, alpha = 1)
     {
         this.filling = true;
-        this.fillColor = color;
-        this.fillAlpha = alpha;
+        this.fillStyle = new SolidBrush(color, alpha);
 
         if (this.currentPath)
         {
             if (this.currentPath.shape.points.length <= 2)
             {
                 this.currentPath.fill = this.filling;
-                this.currentPath.fillColor = this.fillColor;
-                this.currentPath.fillAlpha = this.fillAlpha;
+                this.currentPath.fillStyle = this.fillStyle;
+            }
+        }
+
+        return this;
+    }
+
+    /**
+     * Specifies the fill style used for subsequent calls to Graphics methods
+     * such as the drawRect() method or the drawCircle() method.
+     *
+     * @param {PIXI.Texture} bitmap the texture to fill the shape
+     * @param {PIXI.Matrix} matrix transformation matrix
+     * @param {boolean} repeat whether the bitmap should be tiled
+     * @return {PIXI.Graphics} This Graphics object. Good for chaining method calls
+     */
+    beginBitmapFill(bitmap, matrix, repeat)
+    {
+        this.filling = true;
+        this.fillStyle = new TextureBrush(bitmap, matrix, repeat);
+
+        if (this.currentPath)
+        {
+            if (this.currentPath.shape.points.length <= 2)
+            {
+                this.currentPath.fillStyle = this.fillStyle;
             }
         }
 
@@ -572,8 +625,7 @@ export default class Graphics extends Container
     endFill()
     {
         this.filling = false;
-        this.fillColor = null;
-        this.fillAlpha = 1;
+        this.fillStyle = null;
 
         return this;
     }
@@ -1026,10 +1078,8 @@ export default class Graphics extends Container
 
         const data = new GraphicsData(
             this.lineWidth,
-            this.lineColor,
-            this.lineAlpha,
-            this.fillColor,
-            this.fillAlpha,
+            this.strokeStyle,
+            this.fillStyle,
             this.filling,
             shape
         );

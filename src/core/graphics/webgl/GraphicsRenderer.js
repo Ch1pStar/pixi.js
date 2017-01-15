@@ -4,6 +4,7 @@ import ObjectRenderer from '../../renderers/webgl/utils/ObjectRenderer';
 import WebGLRenderer from '../../renderers/webgl/WebGLRenderer';
 import WebGLGraphicsData from './WebGLGraphicsData';
 import PrimitiveShader from './shaders/PrimitiveShader';
+import TextureShader from './shaders/TextureShader';
 
 import buildPoly from './utils/buildPoly';
 import buildRectangle from './utils/buildRectangle';
@@ -30,6 +31,8 @@ export default class GraphicsRenderer extends ObjectRenderer
 
         this.primitiveShader = null;
 
+        this.textureShader = null;
+
         this.gl = renderer.gl;
 
         // easy access!
@@ -47,6 +50,7 @@ export default class GraphicsRenderer extends ObjectRenderer
         this.gl = this.renderer.gl;
         this.CONTEXT_UID = this.renderer.CONTEXT_UID;
         this.primitiveShader = new PrimitiveShader(this.gl);
+        this.textureShader = new TextureShader(this.gl);
     }
 
     /**

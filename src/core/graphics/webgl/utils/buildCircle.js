@@ -40,8 +40,8 @@ export default function buildCircle(graphicsData, webGLData)
 
     if (graphicsData.fill)
     {
-        const color = hex2rgb(graphicsData.fillColor);
-        const alpha = graphicsData.fillAlpha;
+        const color = hex2rgb(graphicsData.fillStyle.color);
+        const alpha = graphicsData.fillStyle.alpha;
 
         const r = color[0] * alpha;
         const g = color[1] * alpha;
