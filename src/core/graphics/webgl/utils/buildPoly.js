@@ -39,9 +39,11 @@ export default function buildPoly(graphicsData, webGLData)
 
         const length = points.length / 2;
 
+        const fillStyle = graphicsData.fillStyle;
+
         // sort color
-        const color = hex2rgb(graphicsData.fillStyle.color);
-        const alpha = graphicsData.fillStyle.alpha;
+        const color = hex2rgb(fillStyle.color);
+        const alpha = fillStyle.alpha;
         const r = color[0] * alpha;
         const g = color[1] * alpha;
         const b = color[2] * alpha;
@@ -53,7 +55,12 @@ export default function buildPoly(graphicsData, webGLData)
             return;
         }
 
-        const vertPos = verts.length / 6;
+        const vertPos = verts.length / 8;
+        console.log('t', triangles);
+        console.log('v', verts);
+        console.log('i', indices);
+
+        console.log(verts.length, vertPos);
 
         for (let i = 0; i < triangles.length; i += 3)
         {
@@ -63,6 +70,14 @@ export default function buildPoly(graphicsData, webGLData)
             indices.push(triangles[i + 2] + vertPos);
             indices.push(triangles[i + 2] + vertPos);
         }
+
+        const _uvs = fillStyle.texture._uvs.uvsUint32;
+        const uvs = [_uvs[0], _uvs[1], _uvs[2], _uvs[3], _uvs[0]];
+
+
+
+        console.log('i', indices);
+        console.log(uvs);
 
         for (let i = 0; i < length; i++)
         {

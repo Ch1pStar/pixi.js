@@ -71,7 +71,8 @@ export default class WebGLGraphicsData
         this.vao = new glCore.VertexArrayObject(gl, attribsState)
         .addIndex(this.indexBuffer)
         .addAttribute(this.buffer, shader.attributes.aVertexPosition, gl.FLOAT, false, 4 * 6, 0)
-        .addAttribute(this.buffer, shader.attributes.aColor, gl.FLOAT, false, 4 * 6, 2 * 4);
+        .addAttribute(this.buffer, shader.attributes.aColor, gl.FLOAT, false, 4 * 6, 2 * 4)
+        .addAttribute(this.buffer, shader.attributes.aTextureCoord, gl.UNSIGNED_SHORT, true, 4 * 6, 3 * 4);
     }
 
     /**

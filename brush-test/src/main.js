@@ -3,28 +3,29 @@ const PIXI = require('../../lib');
 const init = ()=>{
 	const renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight,{
 		antialias: true,
-		backgroundColor: 0xCCCCCC
+		backgroundColor: 1
 	});
 	document.body.appendChild(renderer.view);
 	const stage = new PIXI.Container();
 
-	const grpx = new PIXI.Graphics();
-	// grpx.lineStyle(5, 123);
-	grpx.beginFill(123);
+	// const grpx = new PIXI.Graphics();
+	// // grpx.lineStyle(5, 123);
+	// grpx.beginFill(123);
 	
-	grpx.moveTo(0,0);
-	grpx.lineTo(250,0);
-	grpx.lineTo(250,250);
-	grpx.lineTo(0,50);
-	grpx.lineTo(0,0);
+	// grpx.moveTo(0,0);
+	// grpx.lineTo(250,0);
+	// grpx.lineTo(250,250);
+	// grpx.lineTo(0,50);
+	// grpx.lineTo(0,0);
 
-	grpx.endFill();
-	grpx.x = 200;
-	grpx.y = 200;
-	stage.addChild(grpx);
+	// grpx.endFill();
+	// grpx.x = 200;
+	// grpx.y = 200;
+	// stage.addChild(grpx);
 
 
-    PIXI.loader.add('brick', 'img/brick_wall.png');
+    PIXI.loader.add('brick', 'img/wut.png');
+    // PIXI.loader.add('brick', 'img/brick_wall.png');
 
     PIXI.loader.load(loader=>{
         const brickRes = loader.resources['brick'];
@@ -50,7 +51,7 @@ const init = ()=>{
 
         grpx.endFill();
         grpx.x = 200;
-        grpx.y = 500;
+        grpx.y = 50;
         stage.addChild(grpx);
     });
 
